@@ -1,5 +1,7 @@
 # pyreddit
-browse reddit from terminal
+browse reddit from terminal.
+
+to run, enter 'python ./main.py' from within the program directory.
 
 uses PRAW and colorama to create a basic reddit browser from terminal.
 
