@@ -13,7 +13,7 @@ def connect_to_reddit(client_id, client_secret, user_agent, username, password):
     return reddit
 
 """
-attempts to connect to a subreddit given the subreddits name and a praw instance
+attempts to connect to a subreddit given the subreddits name, tab and a praw instance
 """
 def connect_to_subreddit(reddit, subreddit_title, tab):
     if tab == 'hot':

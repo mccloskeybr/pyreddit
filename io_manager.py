@@ -2,6 +2,9 @@
 settings_filename = './settings.txt'
 credentials_filename = './credentials.txt'
 
+"""
+straightforward, loads credentials from file (default filename above)
+"""
 def load_credentials_from_file():
     global credentials_filename
     f = open(credentials_filename, 'r')
@@ -26,14 +29,14 @@ def load_credentials_from_file():
         else:
             raise Exception('Unexpected token <' + line_bits[0] + '> recieved when reading from credentials file.')
 
-    print 'a', 'b', 'c'
-    print client_id, client_secret, user_agent, username, password
-
     if client_id == '' or client_secret == '' or user_agent == '' or username == '' or password == '':
         raise Exception('Error reading from credentials file.')
 
     return client_id, client_secret, user_agent, username, password
 
+"""
+straightforward, loads settings from file (default filename above)
+"""
 def load_settings_from_file():
     global settings_filename
     f = open(settings_filename, 'r')

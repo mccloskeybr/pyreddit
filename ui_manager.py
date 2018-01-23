@@ -2,12 +2,19 @@ import praw
 import os
 from colorama import Fore
 
+# used for only printing the desired num comments
 comment_counter = 0
 
+"""
+resets the screen and posts logged in user at top
+"""
 def reset_screen(reddit):
     os.system('cls' if os.name == 'nt' else 'clear')
     print Fore.RED + '**' + Fore.WHITE + 'Logged in as user:', Fore.CYAN + str(reddit.user.me()), Fore.RED + '**', Fore.WHITE
 
+"""
+prints the current subreddit to the screen
+"""
 def print_subreddit(reddit, subreddit):
     reset_screen(reddit)
     
@@ -16,6 +23,9 @@ def print_subreddit(reddit, subreddit):
         print Fore.GREEN + str(submission.score), Fore.WHITE +  ':', Fore.BLUE + submission.title
         print Fore.WHITE + str(submission.author), Fore.YELLOW + str(submission.num_comments) + ' comments', Fore.BLUE + 'URL:', Fore.CYAN + submission.url
 
+"""
+prints a post to the screen, including comments
+"""
 def print_submission(reddit, submission, max_comments):
     global comment_counter
     reset_screen(reddit)
@@ -32,6 +42,10 @@ def print_submission(reddit, submission, max_comments):
     for comment in submission.comments:
         _print_comments(comment, '', max_comments)
 
+"""
+helper method for printing comments
+performs depth-first search on comments (makes sense for tree-structure) for printing
+"""
 def _print_comments(comment, tab, max_comments):
     global comment_counter
     
@@ -50,6 +64,9 @@ def _print_comments(comment, tab, max_comments):
     for reply in comment.replies:
         _print_comments(reply, tab + '  | ', max_comments)
 
+"""
+prints long text bodies into chunks for easy reading
+"""
 def _split_text_body(body, blocksize):
     body_bits = []
     i = 0

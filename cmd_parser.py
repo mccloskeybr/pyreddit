@@ -4,7 +4,14 @@ import webbrowser
 import connection_manager
 import ui_manager
 
+"""
+class to tokenize and parse commands
+"""
 class CmdParser:
+    """
+    standard init, takes in defaults loaded from io (done in main)
+    as commands are parsed here, requires access to the core praw reddit instance
+    """
     def __init__(self, reddit, default_page_size, default_num_comments):
         self.reddit = reddit
         self.subreddit = None
@@ -13,9 +20,13 @@ class CmdParser:
         self.page_size = default_page_size
         self.num_comments = default_num_comments
 
+    """
+    print the help screen
+    """
     def cmd_help(self):
         print '** Welcome to pyreddit **'
         print 'h, help\t\t\t\t\t-\tprint this screen.'
+        print 'v, version\t\t\t\t-\tdisplay version and general pyreddit info.'
         print 's, subreddit <a> <b=hot> <c=' + str(self.page_size) + '>\t\t-\tconnect to subreddit <a>, with optional tab <b> (tabs listed below), <c> many posts.'
         print '\t\t\t\t\t\tno arguments will reprint the current subreddit.'
         print '\t\t\t\t\t\ttabs: hot, controversial, new, rising, top (default hot).'
@@ -24,22 +35,41 @@ class CmdParser:
         print 'url <a>\t\t\t\t\t-\topen the current post\'s url, or index <a>\'s (if given), under the current subreddit.'
         print 'q, quit\t\t\t\t\t-\tquits pyreddit'
 
+    """
+    print current version and dev info
+    """
+    def cmd_version(self):
+        print 'pyreddit v.1.0 by Brendan McCloskey'
+        print 'mccloskeydev.wordpress.com'
+
+    """
+    connect to a specified subreddit (with some additional parameters) using connection_manager
+    """
     def cmd_subreddit(self, title, tab, page_size):
         self.subreddit = connection_manager.connect_to_subreddit(self.reddit, title, tab)
         self.cmd_next_page(page_size)
         ui_manager.print_subreddit(self.reddit, self.current_page)
 
+    """
+    view the next page of the current subreddit (iterates through subreddit and adds to page)
+    """
     def cmd_next_page(self, page_size):
         self.current_page = []
         for i in range(page_size):
             self.current_page.append(self.subreddit.next())
 
+    """
+    open a specified post from the current subreddit by sending post info to ui_manager
+    """
     def cmd_open(self, index, num_comments):
         if self.subreddit == None:
             raise Exception('Not currently connected to a subreddit.')
         self.submission = self.current_page[index]
         ui_manager.print_submission(self.reddit, self.submission, num_comments)
 
+    """
+    open the url of a specified post or the current post by using the webbrowser
+    """
     def cmd_open_url(self, index=None):
         if index is not None:
             self.submission = self.current_page[index]
@@ -47,6 +77,9 @@ class CmdParser:
             raise Exception('Not currently connected to a post.')
         webbrowser.open_new_tab(self.submission.url)
 
+    """
+    parses a given command. usually parses and sends to method above
+    """
     def parse_cmd(self, raw_cmd):
         if raw_cmd == '':
             return
@@ -56,6 +89,9 @@ class CmdParser:
         cmd = cmd_tokens[0]
         if cmd == 'h' or cmd == 'help':
             self.cmd_help()
+
+        elif cmd == 'v' or cmd == 'version':
+            self.cmd_version()
 
         elif cmd == 's' or cmd == 'subreddit':
             self.submission = None

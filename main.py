@@ -6,13 +6,16 @@ import ui_manager
 from cmd_parser import CmdParser
 import io_manager
 
-def version():
-    return 'pyreddit v0.1'
-
+"""
+simply prints prompt and waits for a response via raw_input()
+"""
 def get_cmd():
     sys.stdout.write(Fore.WHITE + '(pyreddit) > ')
     return raw_input()
 
+"""
+sets up the program and contains the main cmd fetch cycle
+"""
 def main():
     print 'Reading credentials from credentials.txt...'
     client_id, client_secret, user_agent, username, password = io_manager.load_credentials_from_file()
@@ -20,7 +23,7 @@ def main():
 
     print 'Connecting to reddit...'
     reddit = connection_manager.connect_to_reddit(client_id, client_secret, user_agent, username, password)
-    #print 'Connection successful! Logged in as user', reddit.user.me()
+    print 'Connection successful! Logged in as user', reddit.user.me()
 
     print 'Reading settings from settings.txt...'
     default_page_size, default_num_comments = io_manager.load_settings_from_file()
