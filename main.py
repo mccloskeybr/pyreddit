@@ -6,6 +6,9 @@ import ui_manager
 from cmd_parser import CmdParser
 import io_manager
 
+# TODO
+# add a previous page command
+
 """
 simply prints prompt and waits for a response via raw_input()
 """
